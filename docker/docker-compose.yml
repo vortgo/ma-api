@@ -1,0 +1,20 @@
+version: "3.7"
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  esdata:
+    driver: local
+
+services:
+  ### Api ###########################################
+  api:
+    build:
+      context: ../
+      args:
+        app_env: prod
+    networks:
+      - backend
+    restart: on-failure
