@@ -12,9 +12,8 @@ RUN go mod download
 
 ADD . ./
 
-
 RUN go build -o main .
 
-
-
 CMD ["/app/main"]
+
+EXPOSE 1323
