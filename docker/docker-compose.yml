@@ -4,10 +4,6 @@ networks:
   backend:
     driver: bridge
 
-volumes:
-  esdata:
-    driver: local
-
 services:
   ### Api ###########################################
   api:
