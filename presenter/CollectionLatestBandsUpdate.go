@@ -11,7 +11,7 @@ type collectionLatestBandsUpdatePresenter struct {
 
 type latestBandsUpdateSimpleCollection struct {
 	ID   int    `json:"id"`
-	Name string `json:"name"`
+	Name string `json:"title"`
 	Date string `json:"date"`
 }
 
@@ -25,7 +25,7 @@ func (presenter *collectionLatestBandsUpdatePresenter) SimpleCollection() []*lat
 		collection = append(collection, &latestBandsUpdateSimpleCollection{
 			ID:   int(latestBand.BandID),
 			Name: latestBand.Band.Name,
-			Date: latestBand.CreatedAt.Format(time.RFC3339),
+			Date: latestBand.UpdatedAt.Format(time.RFC3339),
 		})
 	}
 
