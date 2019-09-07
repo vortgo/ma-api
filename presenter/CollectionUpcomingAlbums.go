@@ -2,6 +2,7 @@ package presenter
 
 import (
 	"github.com/vortgo/ma-parser/models"
+	"ma-api/utils"
 )
 
 type collectionUpcomingAlbumsPresenter struct {
@@ -21,12 +22,19 @@ func NewCollectionUpcomingAlbumsPresenter(upcomingAlbums []*models.UpcomingAlbum
 
 func (presenter *collectionUpcomingAlbumsPresenter) SimpleCollection() []*upcomingAlbumsSimpleCollection {
 	var collection []*upcomingAlbumsSimpleCollection
+
 	for _, upcomingAlbum := range presenter.upcomingAlbums {
+
+		image := upcomingAlbum.Album.Image
+		if image == "" {
+			image = utils.MakeAppUrl("static/empty-album.jpg")
+		}
+
 		collection = append(collection, &upcomingAlbumsSimpleCollection{
 			ID:       int(upcomingAlbum.AlbumID),
 			Name:     upcomingAlbum.Album.Name,
 			BandName: upcomingAlbum.Album.Band.Name,
-			Image:    upcomingAlbum.Album.Image,
+			Image:    image,
 		})
 	}
 
