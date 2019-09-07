@@ -2,6 +2,7 @@ package presenter
 
 import (
 	"github.com/vortgo/ma-parser/models"
+	"ma-api/utils"
 	"time"
 )
 
@@ -41,6 +42,11 @@ func NewCollectionAlbumPresenter(albums []*models.Album) *collectionAlbumPresent
 }
 
 func (presenter *albumPresenter) SimpleAlbum() *simpleAlbum {
+	image := presenter.album.Image
+	if image == "" {
+		image = utils.MakeAppUrl("static/empty-album.jpg")
+	}
+
 	return &simpleAlbum{
 		Id:          int(presenter.album.ID),
 		BandId:      int(presenter.album.BandID),
@@ -50,7 +56,7 @@ func (presenter *albumPresenter) SimpleAlbum() *simpleAlbum {
 		Year:        presenter.album.Year,
 		ReleaseDate: presenter.album.ReleaseDate,
 		Label:       presenter.album.Label.Name,
-		Image:       presenter.album.Image,
+		Image:       image,
 		TotalTime:   presenter.album.TotalTime,
 	}
 }

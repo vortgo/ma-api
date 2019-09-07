@@ -2,6 +2,7 @@ package presenter
 
 import (
 	"github.com/vortgo/ma-parser/models"
+	"ma-api/utils"
 )
 
 type bandPresenter struct {
@@ -51,6 +52,11 @@ func (presenter *bandPresenter) SimpleBand() *simpleBand {
 		lyricalTheme = append(lyricalTheme, bandLyricalTheme.Name)
 	}
 
+	imageBand := presenter.band.ImageBand
+	if imageBand == "" {
+		imageBand = utils.GetBandStabImageUrl(int(presenter.band.ID))
+	}
+
 	return &simpleBand{
 		ID:           int(presenter.band.ID),
 		Name:         presenter.band.Name,
@@ -60,7 +66,7 @@ func (presenter *bandPresenter) SimpleBand() *simpleBand {
 		Label:        presenter.band.Label.Name,
 		Description:  presenter.band.Description,
 		ImageLogo:    presenter.band.ImageLogo,
-		ImageBand:    presenter.band.ImageBand,
+		ImageBand:    imageBand,
 		Genres:       genres,
 		LyricalTheme: lyricalTheme,
 	}
