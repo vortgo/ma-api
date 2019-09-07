@@ -15,7 +15,7 @@ import (
 
 type searchEntityData struct {
 	Name string `json:"name"`
-	Data interface{}
+	Data interface{} `json:"data"`
 }
 
 func Search(context echo.Context) error {
