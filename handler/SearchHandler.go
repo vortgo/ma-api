@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo"
 	"github.com/olivere/elastic/v7"
 	"github.com/vortgo/ma-parser/models"
@@ -14,7 +15,7 @@ import (
 )
 
 type searchEntityData struct {
-	Name string `json:"name"`
+	Name string      `json:"name"`
 	Data interface{} `json:"data"`
 }
 
@@ -32,7 +33,7 @@ func Search(context echo.Context) error {
 	)
 
 	bandIds := searchIds(band.GetIndexName(), findPhrase)
-
+	fmt.Println(bandIds)
 	repositories.PostgresDB.
 		Where(`id in (?)`, bandIds).
 		Order("id asc").
@@ -56,8 +57,11 @@ func Search(context echo.Context) error {
 }
 
 func searchIds(index, search string) []interface{} {
+	var lw = os.Stdout
+	lout := log.New(lw, "LOGGER ", log.LstdFlags)
+
 	var ids []interface{}
-	es, err := elastic.NewClient(elastic.SetHttpClient(utils.CustomHttpClient), elastic.SetSniff(false), elastic.SetHealthcheck(false), elastic.SetURL(os.Getenv("ELASTIC_URL")))
+	es, err := elastic.NewClient(elastic.SetTraceLog(lout), elastic.SetHttpClient(utils.CustomHttpClient), elastic.SetSniff(false), elastic.SetHealthcheck(false), elastic.SetURL(os.Getenv("ELASTIC_URL")))
 	if err != nil {
 		log.Printf("Elastic: %s\n", err)
 		return ids
