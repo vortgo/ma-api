@@ -1,6 +1,7 @@
 module ma-api
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.2.9 // indirect
 	github.com/olivere/elastic v6.2.22+incompatible

@@ -3,6 +3,7 @@ package presenter
 import (
 	"github.com/vortgo/ma-parser/models"
 	"ma-api/utils"
+	"strconv"
 )
 
 type bandPresenter struct {
@@ -78,7 +79,7 @@ func (presenter *collectionBandPresenter) SearchBands() []*searchBand {
 	for _, band := range presenter.bands {
 		collection = append(collection, &searchBand{
 			ID:   int(band.ID),
-			Name: band.Name,
+			Name: band.Name + " - " + band.Country.Name + " (" + strconv.Itoa(band.FormedIn) + ")",
 		})
 	}
 

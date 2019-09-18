@@ -5,17 +5,22 @@ import (
 	"github.com/vortgo/ma-parser/models"
 	"github.com/vortgo/ma-parser/repositories"
 	"ma-api/presenter"
+	"net/http"
 	"strconv"
 )
 
 func BandById(context echo.Context) error {
 	band := models.Band{}
 	bandId, _ := strconv.Atoi(context.Param("id"))
-	repositories.PostgresDB.
+	db := repositories.PostgresDB.
 		Preload("Genres").
 		Preload("Label").
 		Preload("Country").
 		Preload("LyricalThemes").Find(&band, bandId)
+
+	if db.Error != nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
 
 	simpleBand := presenter.NewBandPresenter(&band).SimpleBand()
 

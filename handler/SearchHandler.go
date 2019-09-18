@@ -14,7 +14,7 @@ import (
 )
 
 type searchEntityData struct {
-	Name string `json:"name"`
+	Name string      `json:"name"`
 	Data interface{} `json:"data"`
 }
 
@@ -34,6 +34,7 @@ func Search(context echo.Context) error {
 	bandIds := searchIds(band.GetIndexName(), findPhrase)
 
 	repositories.PostgresDB.
+		Preload("Country").
 		Where(`id in (?)`, bandIds).
 		Order("id asc").
 		Find(&bands)

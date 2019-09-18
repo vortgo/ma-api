@@ -5,6 +5,7 @@ import (
 	"github.com/vortgo/ma-parser/models"
 	"github.com/vortgo/ma-parser/repositories"
 	"ma-api/presenter"
+	"net/http"
 	"strconv"
 )
 
@@ -16,7 +17,11 @@ type User struct {
 func AlbumById(c echo.Context) error {
 	album := models.Album{}
 	albumId, _ := strconv.Atoi(c.Param("id"))
-	repositories.PostgresDB.Preload("Label").Preload("Band").First(&album, albumId)
+	db := repositories.PostgresDB.Preload("Label").Preload("Band").First(&album, albumId)
+
+	if db.Error != nil {
+		return echo.NewHTTPError(http.StatusNotFound)
+	}
 
 	simpleAlbum := presenter.NewAlbumPresenter(&album).SimpleAlbum()
 
