@@ -13,6 +13,9 @@ func RegisterRoutes(e *echo.Echo) {
 	album.GET("/:id", AlbumById)
 	album.GET("/:id/songs", AlbumSongs)
 
+	song := api.Group("/song")
+	song.GET("/:id", SongById)
+
 	collection := api.Group("/collection")
 	collection.GET("/latest-bands-update", LatestBandsUpdate)
 	collection.GET("/upcoming-albums", UpcomingAlbums)

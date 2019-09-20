@@ -9,11 +9,6 @@ import (
 	"strconv"
 )
 
-type User struct {
-	Name  string `json:"name" xml:"name"`
-	Email string `json:"email" xml:"email"`
-}
-
 func AlbumById(c echo.Context) error {
 	album := models.Album{}
 	albumId, _ := strconv.Atoi(c.Param("id"))

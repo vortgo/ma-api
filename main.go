@@ -13,4 +13,5 @@ func main() {
 	e.Static("/static", "assets")
 	handler.RegisterRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
+
 }
