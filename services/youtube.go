@@ -33,6 +33,7 @@ func (searcher *YoutubeSearcher) Search(query string) (string, string) {
 		Q(query).
 		MaxResults(1).
 		Type("video").
+		VideoEmbeddable("true").
 		Order("relevance")
 	response, err := call.Do()
 
