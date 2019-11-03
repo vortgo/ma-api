@@ -34,3 +34,10 @@ func SongById(c echo.Context) error {
 
 	return c.JSON(200, &simpleSong)
 }
+
+func SongIframe(c echo.Context) error {
+	videoId := c.QueryParam("video_id")
+	params := make(map[string]interface{})
+	params["videoId"] = videoId
+	return c.Render(http.StatusOK, "song_iframe.html", params)
+}

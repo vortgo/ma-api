@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Song iframe</title>
+</head>
+<body style="margin: 0px">
+<iframe style="position: absolute; height: 100%; width: 100%; border: none"
+        src="https://www.youtube.com/embed/{{ index . "videoId" }}?origin=https://www.youtube.com&enablejsapi=1"
+        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+</body>
+</html>

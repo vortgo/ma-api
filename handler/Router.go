@@ -3,6 +3,7 @@ package handler
 import "github.com/labstack/echo"
 
 func RegisterRoutes(e *echo.Echo) {
+	e.GET("/song-iframe", SongIframe)
 	api := e.Group("/api/v1")
 
 	band := api.Group("/band")
@@ -21,4 +22,5 @@ func RegisterRoutes(e *echo.Echo) {
 	collection.GET("/upcoming-albums", UpcomingAlbums)
 
 	api.GET("/search", Search)
+
 }
