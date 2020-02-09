@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo"
 	"github.com/olivere/elastic/v7"
 	"github.com/vortgo/ma-parser/models"
@@ -31,12 +32,12 @@ func Search(context echo.Context) error {
 		album = models.Album{}
 	)
 
-	bandIds := searchIds(band.GetIndexName(), findPhrase)
+	bandIds := searchBandsIds(band.GetIndexName(), findPhrase)
 
 	repositories.PostgresDB.
 		Preload("Country").
 		Where(`id in (?)`, bandIds).
-		Order("id asc").
+		Order(getOrdersByIds(bandIds)).
 		Find(&bands)
 
 	albumsIds := searchIds(album.GetIndexName(), findPhrase)
@@ -80,4 +81,52 @@ func searchIds(index, search string) []interface{} {
 	}
 
 	return ids
+}
+
+func searchBandsIds(index, search string) []int {
+	var ids []int
+
+	es, err := elastic.NewClient(elastic.SetHttpClient(utils.CustomHttpClient), elastic.SetSniff(false), elastic.SetHealthcheck(false), elastic.SetURL(os.Getenv("ELASTIC_URL")))
+	if err != nil {
+		log.Printf("Elastic: %s\n", err)
+		return ids
+	}
+
+	ctx := context.Background()
+
+	q := elastic.NewFunctionScoreQuery().
+		Query(elastic.NewMatchQuery("name", search)).
+		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['albums_count'].value == 0) ? 1 : doc['albums_count'].value * 0.001"))).
+		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['description_length'].value == 0) ? 1 : doc['description_length'].value * 0.009"))).
+		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['formed_in'].value == 0) ? 1 : (3000 - doc['formed_in'].value) * 0.003"))).
+		BoostMode("avg")
+
+	searchResult, err := es.Search().
+		Index(index).
+		Query(q).
+		From(0).Size(10).
+		Pretty(true).
+		Do(ctx)
+
+	for _, hit := range searchResult.Hits.Hits {
+		item := make(map[string]int)
+		json.Unmarshal(hit.Source, &item)
+		ids = append(ids, item[`id`])
+	}
+
+	return ids
+}
+
+func getOrdersByIds(ids []int) string {
+	sortString := ""
+
+	for _, v := range ids {
+
+		if len(sortString) > 0 {
+			sortString += ","
+		}
+		sortString += fmt.Sprintf("id=%d DESC", v)
+	}
+
+	return sortString
 }
