@@ -4,6 +4,7 @@ import (
 	"github.com/vortgo/ma-parser/models"
 	"ma-api/utils"
 	"strconv"
+	"strings"
 )
 
 type bandPresenter struct {
@@ -15,8 +16,11 @@ type collectionBandPresenter struct {
 }
 
 type searchBand struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID      int    `json:"id"`
+	Name    string `json:"name"`
+	Country string `json:"country"`
+	Year    string `json:"year"`
+	Genres  string `json:"genres"`
 }
 
 type simpleBand struct {
@@ -77,11 +81,26 @@ func (presenter *collectionBandPresenter) SearchBands() []*searchBand {
 	var collection []*searchBand
 
 	for _, band := range presenter.bands {
+		genres := getGenresFromBand(*band)
+
 		collection = append(collection, &searchBand{
-			ID:   int(band.ID),
-			Name: band.Name + " - " + band.Country.Name + " (" + strconv.Itoa(band.FormedIn) + ")",
+			ID:      int(band.ID),
+			Name:    band.Name,
+			Year:    strconv.Itoa(band.FormedIn),
+			Country: band.Country.Name,
+			Genres:  strings.Join(genres, ", "),
 		})
 	}
 
 	return collection
+}
+
+func getGenresFromBand(band models.Band) []string {
+	var genres []string
+
+	for _, genre := range band.Genres {
+		genres = append(genres, genre.Name)
+	}
+
+	return genres
 }

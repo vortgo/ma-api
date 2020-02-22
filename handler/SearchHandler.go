@@ -36,6 +36,7 @@ func Search(context echo.Context) error {
 
 	repositories.PostgresDB.
 		Preload("Country").
+		Preload("Genres").
 		Where(`id in (?)`, bandIds).
 		Order(getOrdersByIds(bandIds)).
 		Find(&bands)

@@ -23,6 +23,8 @@ type searchAlbum struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
 	BandName string `json:"band_name"`
+	Type     string `json:"type"`
+	Year     *int   `json:"year"`
 }
 
 type albumPresenter struct {
@@ -62,13 +64,23 @@ func (presenter *albumPresenter) SimpleAlbum() *simpleAlbum {
 }
 
 func (presenter *collectionAlbumPresenter) SearchAlbum() []*searchAlbum {
-	var collection []*searchAlbum
+	var (
+		collection []*searchAlbum
+		year       *int
+	)
 
 	for _, album := range presenter.albums {
+		if album.Year == 0 {
+			year = nil
+		} else {
+			year = &album.Year
+		}
 		collection = append(collection, &searchAlbum{
 			Id:       int(album.ID),
 			Name:     album.Name,
 			BandName: album.Band.Name,
+			Year:     year,
+			Type:     album.Type,
 		})
 	}
 
