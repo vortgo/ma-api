@@ -1,10 +1,16 @@
 package handler
 
-import "github.com/labstack/echo"
+import (
+	"github.com/labstack/echo"
+	"ma-api/middleware"
+)
 
 func RegisterRoutes(e *echo.Echo) {
+	e.GET("/stat", ApiStat)
+
 	e.GET("/song-iframe", SongIframe)
 	api := e.Group("/api/v1")
+	api.Use(middleware.RequestStatisticMiddleware)
 
 	band := api.Group("/band")
 	band.GET("/:id", BandById)
