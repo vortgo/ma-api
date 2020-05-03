@@ -24,6 +24,6 @@ func RequestStatisticMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		repositories.PostgresDB.Save(&apiRequest)
 
-		return nil
+		return next(c)
 	}
 }
