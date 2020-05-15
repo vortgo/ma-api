@@ -36,3 +36,17 @@ func BandAlbums(context echo.Context) error {
 
 	return context.JSON(200, &albumsCollection)
 }
+
+func BandReviews(context echo.Context) error {
+	var (
+		reviews  []*models.Review
+		albums   []*models.Album
+		albumIds []int
+	)
+	bandId, _ := strconv.Atoi(context.Param("id"))
+	repositories.PostgresDB.Where(&models.Album{BandID: uint(bandId)}).Find(&albums).Pluck("id", &albumIds)
+	repositories.PostgresDB.Preload("Album").Where("album_id IN (?)", albumIds).Find(&reviews)
+	reviewsCollection := presenter.NewReviewsCollectionPresenter(reviews).BandReviewsCollection()
+
+	return context.JSON(200, &reviewsCollection)
+}

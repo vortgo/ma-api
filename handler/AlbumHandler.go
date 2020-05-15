@@ -31,3 +31,14 @@ func AlbumSongs(c echo.Context) error {
 	songsCollection := presenter.NewAlbumSongsPresenter(songs).SongsCollection()
 	return c.JSON(200, &songsCollection)
 }
+
+func AlbumReviews(c echo.Context) error {
+	var (
+		reviews []*models.Review
+	)
+	albumId, _ := strconv.Atoi(c.Param("id"))
+	repositories.PostgresDB.Where("album_id = ?", albumId).Find(&reviews)
+	reviewsCollection := presenter.NewReviewsCollectionPresenter(reviews).AlbumReviewsCollection()
+
+	return c.JSON(200, &reviewsCollection)
+}

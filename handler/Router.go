@@ -15,10 +15,12 @@ func RegisterRoutes(e *echo.Echo) {
 	band := api.Group("/band")
 	band.GET("/:id", BandById)
 	band.GET("/:id/albums", BandAlbums)
+	band.GET("/:id/reviews", BandReviews)
 
 	album := api.Group("/album")
 	album.GET("/:id", AlbumById)
 	album.GET("/:id/songs", AlbumSongs)
+	album.GET("/:id/reviews", AlbumReviews)
 
 	song := api.Group("/song")
 	song.GET("/:id", SongById)
@@ -26,6 +28,9 @@ func RegisterRoutes(e *echo.Echo) {
 	collection := api.Group("/collection")
 	collection.GET("/latest-bands-update", LatestBandsUpdate)
 	collection.GET("/upcoming-albums", UpcomingAlbums)
+
+	review := api.Group("/review")
+	review.GET("/:id", Review)
 
 	api.GET("/search", Search)
 
