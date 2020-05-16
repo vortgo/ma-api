@@ -10,6 +10,7 @@ type review struct {
 	Title   *string `json:"title"`
 	Author  *string `json:"author"`
 	Rating  *int    `json:"rating"`
+	Text    *string `json:"text"`
 }
 
 type reviewPresenter struct {
@@ -27,5 +28,6 @@ func (p *reviewPresenter) SimpleReview() review {
 		Title:   &p.review.Title,
 		Author:  &p.review.Author,
 		Rating:  &p.review.Rating,
+		Text:    &p.review.Text,
 	}
 }
