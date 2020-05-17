@@ -21,10 +21,10 @@ func NewReviewsCollectionPresenter(reviews []*models.Review) *reviewsCollectionP
 	return &reviewsCollectionPresenter{reviews: reviews}
 }
 
-func (p *reviewsCollectionPresenter) BandReviewsCollection() []*reviewInCollection {
-	var collection []*reviewInCollection
+func (p *reviewsCollectionPresenter) BandReviewsCollection() []reviewInCollection {
+	collection := make([]reviewInCollection, 0)
 	for _, review := range p.reviews {
-		collection = append(collection, &reviewInCollection{
+		collection = append(collection, reviewInCollection{
 			ID:        int(review.ID),
 			AlbumName: &review.Album.Name,
 			Title:     &review.Title,
