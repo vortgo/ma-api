@@ -39,10 +39,10 @@ func (p *reviewsCollectionPresenter) BandReviewsCollection() []reviewInCollectio
 	return collection
 }
 
-func (p *reviewsCollectionPresenter) AlbumReviewsCollection() []*reviewInCollection {
-	var collection []*reviewInCollection
+func (p *reviewsCollectionPresenter) AlbumReviewsCollection() []reviewInCollection {
+	collection := make([]reviewInCollection, 0)
 	for _, review := range p.reviews {
-		collection = append(collection, &reviewInCollection{
+		collection = append(collection, reviewInCollection{
 			ID:     int(review.ID),
 			Title:  &review.Title,
 			Author: &review.Author,
