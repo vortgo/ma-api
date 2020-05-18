@@ -97,10 +97,10 @@ func searchBandsIds(index, search string) []int {
 
 	q := elastic.NewFunctionScoreQuery().
 		Query(elastic.NewMatchQuery("name", search)).
-		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['albums_count'].value == 0) ? 1 : doc['albums_count'].value * 0.001"))).
-		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['description_length'].value == 0) ? 1 : doc['description_length'].value * 0.009"))).
-		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['formed_in'].value == 0) ? 1 : (3000 - doc['formed_in'].value) * 0.003"))).
-		BoostMode("avg")
+		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['albums_count'].value == 0) ? 1 : doc['albums_count'].value * 0.0001"))).
+		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['description_length'].value == 0) ? 1 : doc['description_length'].value * 0.0009"))).
+		AddScoreFunc(elastic.NewScriptFunction(elastic.NewScript("(doc['formed_in'].value == 0) ? 1 : (3000 - doc['formed_in'].value) * 0.0003"))).
+		BoostMode("sum")
 
 	searchResult, err := es.Search().
 		Index(index).
