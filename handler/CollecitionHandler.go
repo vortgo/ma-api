@@ -24,3 +24,12 @@ func UpcomingAlbums(context echo.Context) error {
 
 	return context.JSON(200, collection)
 }
+
+func LatestReviews(ctx echo.Context) error {
+	var latestReviews []*models.Review
+	repositories.PostgresDB.Preload("Album.Band").Limit(3).Order("id desc").Find(&latestReviews)
+
+	collection := presenter.NewReviewsCollectionPresenter(latestReviews).ReviewsCollection()
+
+	return ctx.JSON(200, collection)
+}
